@@ -1,2 +1,2 @@
 # EPQ
-EPQ coursework repository
+My name is Sam and this is my EPQ project.
