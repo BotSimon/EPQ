@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Browse
+{% endblock %} 
+
+{% block page_content %}
+
+	<ul>
+	{% for review in reviews %}
+	<li><a href="{{review.url}}">{{review.displayname}}</a></li>
+	{% endfor %}
+	</ul>	
+
+{% endblock %}
+
