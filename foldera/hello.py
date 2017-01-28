@@ -1,11 +1,20 @@
-from flask.ext.wtf import Form
+from flask_wtf import Form
+from flask_sqlalchemy import SQLAlchemy
 from wtforms import StringField, SubmitField, TextAreaField
-from wtforms.validators import Required
+from wtforms.validators import Required, AnyOf, NoneOf
 from flask import Flask, render_template, session, redirect, url_for, flash
 from flask_script import Manager
 from flask_bootstrap import Bootstrap
+
+basedir = os.path.abspath(os.path.dirname(_file_))
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'banana'
+# app.config['SECRET_KEY'] = 'banana'
+app.config['SQLALCHEMY_DATABSE_URI'] ='sqlite:///' + os.path.join(basedir, 'data.sqlite') 
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+
+db= SQLAlchemy(app)
+
 bootstrap = Bootstrap(app)
 import os
 import os.path
@@ -13,25 +22,30 @@ import os.path
 manager = Manager(app) 
 
 class NameForm(Form):
-	name = StringField('What is your name?', validators=[Required()])
+	nochar="_/\\:*?\"<>|"
+	name = StringField('What is your name?', validators=[Required(), NoneOf(nochar)])
 	review = TextAreaField('Write a review', validators=[Required()])
-	author = StringField('Name of author', validators=[Required()])
-	title = StringField('Title of book reviewed', validators=[Required()])
+	author = StringField('Name of author', validators=[Required(), NoneOf(nochar)])
+	title = StringField('Title of book reviewed', validators=[Required(), NoneOf(nochar)])
 	submit = SubmitField('Submit')
 
 def writetofile (name, review, author, title):
 	text="name:  {}, \nreview: {}, \nauthor: {}, \ntitle: {}".format(name, review, author, title)
-	save_path = '/home/pi/Desktop/foldera/reviews'
+	save_path = fullpath('reviews')
 	filename="{}_{}_{}".format(author, title, name)
 	completename = os.path.join(save_path, filename+".txt")
 	file1 = open(completename, "w")
 	file1.write(text)
 	file1.close()	
 
+def fullpath (path): 
+	absolutepath = os.path.abspath(path)
+	return(absolutepath)
 
 
-	#with open (filename, "wb") as fo:
-		#fo.write(text)
+
+
+
 
 @app.route('/')
 def home():
@@ -67,7 +81,7 @@ def write():
 def browse():
 
 	filenames=['name_title_author.txt']
-	path='/home/pi/Desktop/foldera/reviews'
+	path=fullpath('reviews')
 	for filename in os.listdir(path):
 		print(filename)	
 		filenames.append(filename)
@@ -90,7 +104,7 @@ def browse():
 def read(filename):
 	prefix=filename.split('.',1)[0]
 	(name,title,author)=prefix.split('_',3)
-	read_path = '/home/pi/Desktop/foldera/reviews'
+	read_path = fullpath('reviews')
 	completename = os.path.join(read_path, filename)
 	file1 = open(completename, "r")
 	review=file1.read()
