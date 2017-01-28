@@ -7,9 +7,65 @@ from flask_script import Manager
 from flask_bootstrap import Bootstrap
 import os
 import os.path
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+print os.path.join(basedir, 'data.sqlite') 
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
+db = SQLAlchemy(app)
+
 bootstrap = Bootstrap(app)
 manager = Manager(app) 
+
+#class person(db.Model):
+#	__tablename__  = 'people'
+#	id = db.Column(db.Integer, primary_key=True)
+#	first_name = db.Column(db.String(64), unique=False)
+#	last_name = db.Column(db.String(64), unique=False)
+#	date_of_birth = db.Column(db.Date, unique=False)
+
+#	books=db.relationship('book', backref='author')
+
+#	reviews=db.relationship('review',backref='review_author')
+
+
+#class book(db.Model):
+#	__tablename__  = 'books'
+#	id = db.Column(db.Integer, primary_key=True)
+#	title = db.Column(db.String(64), unique=False)
+
+#	author_id = db.Column(db.Integer, db.ForeignKey('people.id')) 
+
+#	description = db.Column(db.Text, unique=False)	
+#	year_published = db.Column(db.Date, unique=False)
+
+#class review(db.Model):
+#	__tablename__ = 'reviews'
+#	id = db.Column(db.Integer, primary_key=True)
+
+#	review_author_id = db.Column(db.Integer, db=ForeignKey('people.id'))
+
+#	review_text = db.Column(db.Text, unique=False)
+#	date_written = db.Column(db.Date, unique=False)
+#	star_rating = db.Column(db.Integer, unique=False)
+
+class Role(db.Model):
+	__tablename__ = 'roles'
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(64), unique=True)
+	users = db.relationship('User', backref='role')
+
+
+class User(db.Model):
+	__tablename__ =  'users'
+	id = db.Column(db.Integer, primary_key=True)
+	username = db.Column(db.String(64), unique=True, index=True)
+	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+
 
 class NameForm(Form):
 	nochar="_/\\:*?\"<>|"
