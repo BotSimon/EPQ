@@ -5,20 +5,10 @@ from wtforms.validators import Required, AnyOf, NoneOf
 from flask import Flask, render_template, session, redirect, url_for, flash
 from flask_script import Manager
 from flask_bootstrap import Bootstrap
-
-basedir = os.path.abspath(os.path.dirname(_file_))
-
-app = Flask(__name__)
-# app.config['SECRET_KEY'] = 'banana'
-app.config['SQLALCHEMY_DATABSE_URI'] ='sqlite:///' + os.path.join(basedir, 'data.sqlite') 
-app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
-
-db= SQLAlchemy(app)
-
-bootstrap = Bootstrap(app)
 import os
 import os.path
- 
+app = Flask(__name__)
+bootstrap = Bootstrap(app)
 manager = Manager(app) 
 
 class NameForm(Form):
