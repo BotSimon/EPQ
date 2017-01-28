@@ -60,7 +60,8 @@ class Person(db.Model):
 	first_name = db.Column(db.String(64), unique=True)
 	date_of_birth = db.Column(db.Date, unique=False)
 
-	users = db.relationship('User', backref='role')
+	books=db.relationship('Book', backref='author')
+	reviews=db.relationship('Review', backref='review_author')
 
 class Book(db.Model):
 	__tablename__ =  'books'
@@ -72,15 +73,15 @@ class Book(db.Model):
 
 	author_id = db.Column(db.Integer, db.ForeignKey('people.id'))
 
+	reviews=db.relationship('Review', backref='book')
 class Review(db.Model):
 	__tablename__ =  'reviews'
 	id = db.Column(db.Integer, primary_key=True)
-	review_author_id = db.Column(db.Integer, db.ForeignKey('people.id'))
 	review_text = db.Column(db.Text, unique=False)
 	date_written = db.Column(db.Date, unique=False)
 	star_rating = db.Column(db.Integer, unique=False)
-
-
+	review_author_id = db.Column(db.Integer, db.ForeignKey('people.id'))
+	book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
 
 
 class NameForm(Form):
