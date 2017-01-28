@@ -72,11 +72,14 @@ class Book(db.Model):
 
 	author_id = db.Column(db.Integer, db.ForeignKey('people.id'))
 
-class User(db.Model):
-	__tablename__ =  'users'
+class Review(db.Model):
+	__tablename__ =  'reviews'
 	id = db.Column(db.Integer, primary_key=True)
-	username = db.Column(db.String(64), unique=True, index=True)
-	role_id = db.Column(db.Integer, db.ForeignKey('people.id'))
+	review_author_id = db.Column(db.Integer, db.ForeignKey('people.id'))
+	review_text = db.Column(db.Text, unique=False)
+	date_written = db.Column(db.Date, unique=False)
+	star_rating = db.Column(db.Integer, unique=False)
+
 
 
 
