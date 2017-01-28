@@ -62,12 +62,22 @@ class Person(db.Model):
 
 	users = db.relationship('User', backref='role')
 
+class Book(db.Model):
+	__tablename__ =  'books'
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(64), unique=True, index=True)
+	
+	description = db.Column(db.Text, unique=False)	
+	year_published = db.Column(db.Date, unique=False)
+
+	author_id = db.Column(db.Integer, db.ForeignKey('people.id'))
 
 class User(db.Model):
 	__tablename__ =  'users'
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(64), unique=True, index=True)
 	role_id = db.Column(db.Integer, db.ForeignKey('people.id'))
+
 
 
 class NameForm(Form):
