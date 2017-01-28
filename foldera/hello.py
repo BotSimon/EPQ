@@ -53,10 +53,13 @@ manager = Manager(app)
 #	date_written = db.Column(db.Date, unique=False)
 #	star_rating = db.Column(db.Integer, unique=False)
 
-class Role(db.Model):
-	__tablename__ = 'roles'
+class Person(db.Model):
+	__tablename__ = 'people'
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(64), unique=True)
+	last_name = db.Column(db.String(64), unique=True)
+	first_name = db.Column(db.String(64), unique=True)
+	date_of_birth = db.Column(db.Date, unique=False)
+
 	users = db.relationship('User', backref='role')
 
 
@@ -64,7 +67,7 @@ class User(db.Model):
 	__tablename__ =  'users'
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(64), unique=True, index=True)
-	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+	role_id = db.Column(db.Integer, db.ForeignKey('people.id'))
 
 
 class NameForm(Form):
