@@ -1,0 +1,46 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Flasky{% endblock %}
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+	href="{{url_for('.static', filename='mystyle.css')}}">
+{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle"
+			data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-0only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">BookReviewSite</a>
+		</div>
+
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+			<li class="{{home_active}}"><a href="/">home</a></li>
+			<li class="{{write_active}}"><a href="/write">Write</a></li>
+			<li class="{{browse_active}}"><a href="/browse">Browse</a></li>
+			<li class="{{search_active}}"><a href="/search">Search</a><li>	
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="container">
+	{% for message in get_flashed_messages() %}
+	<div class="alert alert-warning">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		{{ message }}
+	</div>
+	{% endfor %}
+
+	{% block page_content %}{% endblock %}
+</div>
+ 
+{% endblock %}

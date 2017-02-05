@@ -2,7 +2,7 @@ from flask_wtf import Form
 from flask_sqlalchemy import SQLAlchemy
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import Required, AnyOf, NoneOf
-from flask import Flask, render_template, session, redirect, url_for, flash
+from flask import Flask, render_template, session, redirect, url_for, flash, request
 from flask_script import Manager
 from flask_bootstrap import Bootstrap
 import os
@@ -57,8 +57,8 @@ manager = Manager(app)
 class Person(db.Model):
     __tablename__ = 'people'
     id = db.Column(db.Integer, primary_key=True)
-    last_name = db.Column(db.String(64), unique=False)
-    first_name = db.Column(db.String(64), unique=False)
+    last_name = db.Column(db.String(64), unique=False, nullable=False)
+    first_name = db.Column(db.String(64), unique=False, nullable=False)
     #date_of_birth = db.Column(db.Date, unique=False)
     books=db.relationship('Book', backref='author')
     reviews=db.relationship('Review', backref='review_author')
@@ -66,20 +66,23 @@ class Person(db.Model):
 class Book(db.Model):
     __tablename__ =  'books'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(64), unique=True, index=True)
+    title = db.Column(db.String(64), unique=True, index=True, nullable=False)
     #description = db.Column(db.Text, unique=False)
     #year_published = db.Column(db.Date, unique=False)
-    author_id = db.Column(db.Integer, db.ForeignKey('people.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('people.id'), nullable=False)
     reviews=db.relationship('Review', backref='book')
 
 class Review(db.Model):
     __tablename__ =  'reviews'
     id = db.Column(db.Integer, primary_key=True)
-    review_text = db.Column(db.Text, unique=False)
+    review_text = db.Column(db.Text, unique=False, nullable=False)
     #date_written = db.Column(db.Date, unique=False)
     #star_rating = db.Column(db.Integer, unique=False)
-    review_author_id = db.Column(db.Integer, db.ForeignKey('people.id'))
-    book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
+    review_author_id = db.Column(db.Integer, db.ForeignKey('people.id'),nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id'),nullable=False)
+    def __repr__(self):
+        found_book = Book.query.filter_by(id = self.book_id).first()
+        return '<Book title: %r>' % found_book.title
 
 
 class NameForm(Form):
@@ -90,7 +93,7 @@ class NameForm(Form):
     author_first_name = StringField('Author first name', validators=[Required(), NoneOf(nochar)])
     author_surname = StringField('Author surnamer', validators=[Required(), NoneOf(nochar)])
 
-    review = TextAreaField('Write a review', validators=[Required()])
+    review = TextAreaField('Write a review', validators=[Required(),NoneOf(nochar)])
 
     submit = SubmitField('Submit')
 
@@ -167,21 +170,17 @@ def write():
         db.session.add(review)
 
 
+# clear the form
 
 
         form.first_name.data = ''
         form.last_name.data = ''
         form.author_surname = ''
         form.author_first_name = ''
+        form.title.data = ''
+        form.review.data = ''
 
 
-
-
-
-
-
-
-        #writetofile(name, review, author, title)
         flash('Your review has been submitted.')
         return render_template('write.html',
         form = form, write_active="active")
@@ -197,26 +196,54 @@ def write():
 
 @app.route('/browse')
 def browse():
-
-    filenames=['name_title_author.txt']
-    path=fullpath('reviews')
-    for filename in os.listdir(path):
-        print(filename)
-        filenames.append(filename)
-    reviews=[]
-    for filename in filenames:
-        print(filename)
-        prefix=filename.split('.',1)[0]
-        print(prefix)
-        (name,title,author)=prefix.split('_',3)
+    requested_review_id = request.args.get('review_id')
 
 
-        displayname="{} {} {}".format(title, author, name)
-        url="read/{}".format(filename)
-        review={'url':url, 'displayname': displayname}
+
+    #filenames=['name_title_author.txt']
+    #path=fullpath('reviews')
+
+    reviews = Review.query.all()
+    display_reviews = []
+    requested_id = -1
+    if requested_review_id != None:
+        requested_id = int(requested_review_id)
+
+    for review in reviews:
         print(review)
-        reviews.append(review)
-    return render_template('browse.html', browse_active="active", reviews=reviews)
+        #prefix=filename.split('.',1)[0]
+        #print(prefix)
+        #(name,title,author)=prefix.split('_',3)
+        identifier = review.id
+        book =   Book.query.filter_by(id = review.book_id).first()
+        title = book.title
+        author = Person.query.filter_by(id = book.author_id).first()
+        review_author = Person.query.filter_by(id = review.review_author_id).first()
+
+
+        display_string="{} {} {} {} {}".format(
+        title,
+         author.first_name,
+         author.last_name,
+         review_author.first_name,
+         review_author.last_name,
+         )
+        #print ("review.id: {} requested_review_id: {} subtraction: {}".format(review.id,requested_review_id, review.id-int(requested_review_id)))
+        print("review.id: {} requested_id: {} subtraction: {}".format(review.id,requested_id,review.id-requested_id))
+
+        display_review_text = ""
+        if requested_id == review.id:
+             print ("requested_id == review.id")
+             display_review_text = review.review_text
+             print ("display_review_text {}".format(display_review_text))
+        #print (displayname)
+        display_review = [identifier,display_string,display_review_text]
+        display_reviews.append(display_review)
+
+    print (display_reviews)
+
+
+    return render_template('browse.html', browse_active="active", reviews=display_reviews)
 
 @app.route('/read/<filename>')
 def read(filename):
