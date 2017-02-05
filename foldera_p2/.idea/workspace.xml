@@ -26,27 +26,16 @@
       <file leaf-file-name="hello.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/hello.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.53944564" vertical-offset="3965" max-vertical-offset="4788">
-              <caret line="243" column="46" selection-start-line="237" selection-start-column="7" selection-end-line="243" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.76339287" vertical-offset="1387" max-vertical-offset="5168">
+              <caret line="101" column="60" selection-start-line="101" selection-start-column="60" selection-end-line="101" selection-end-column="60" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
-                <element signature="e#2716#3281#0" expanded="false" />
-                <element signature="e#4621#7049#0" expanded="true" />
-                <marker date="1486264332000" expanded="true" signature="7455:7476" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/venv/lib/python2.7/site-packages/flask/app.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="8656" max-vertical-offset="10412">
-              <caret line="1610" column="26" selection-start-line="1610" selection-start-column="26" selection-end-line="1610" selection-end-column="26" />
-              <folding>
-                <element signature="e#32175#32414#2" expanded="false" />
-                <element signature="e#65863#66892#0" expanded="true" />
-                <element signature="e#81315#82809#0" expanded="true" />
+                <element signature="e#2726#3291#0" expanded="false" />
+                <element signature="e#4760#4818#0" expanded="true" />
+                <element signature="e#4885#5295#0" expanded="true" />
+                <element signature="e#5361#7789#0" expanded="true" />
+                <element signature="e#7831#9290#0" expanded="true" />
+                <element signature="e#9819#9853#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -97,6 +86,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -117,7 +107,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -326,12 +315,12 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3285151" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298292" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24946997" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3981603" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24946997" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6608108" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3972973" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3298292" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3391892" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -382,39 +371,44 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/hello.py</url>
-          <line>220</line>
+          <line>230</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/hello.py</url>
-          <line>237</line>
+          <line>254</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/hello.py</url>
-          <line>158</line>
+          <line>173</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/hello.py</url>
-          <line>182</line>
+          <line>200</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/hello.py</url>
-          <line>214</line>
+          <line>232</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/hello.py</url>
-          <line>243</line>
+          <line>261</line>
           <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/hello.py</url>
+          <line>131</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="10" />
+      <option name="time" value="11" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -424,9 +418,12 @@
           <caret line="218" column="0" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
-            <element signature="e#2716#3281#0" expanded="false" />
-            <element signature="e#4621#7049#0" expanded="true" />
-            <marker date="1486264332000" expanded="true" signature="7455:7476" placeholder="..." />
+            <element signature="e#2726#3291#0" expanded="false" />
+            <element signature="e#4760#4818#0" expanded="true" />
+            <element signature="e#4885#5295#0" expanded="true" />
+            <element signature="e#5361#7789#0" expanded="true" />
+            <element signature="e#7831#9290#0" expanded="true" />
+            <element signature="e#9819#9853#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -485,7 +482,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python2.7/site-packages/flask/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="8656" max-vertical-offset="10412">
+        <state vertical-scroll-proportion="0.29253113" vertical-offset="8656" max-vertical-offset="10412">
           <caret line="1610" column="26" selection-start-line="1610" selection-start-column="26" selection-end-line="1610" selection-end-column="26" />
           <folding>
             <element signature="e#32175#32414#2" expanded="false" />
@@ -497,13 +494,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/hello.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.53944564" vertical-offset="3965" max-vertical-offset="4788">
-          <caret line="243" column="46" selection-start-line="237" selection-start-column="7" selection-end-line="243" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.76339287" vertical-offset="1387" max-vertical-offset="5168">
+          <caret line="101" column="60" selection-start-line="101" selection-start-column="60" selection-end-line="101" selection-end-column="60" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
-            <element signature="e#2716#3281#0" expanded="false" />
-            <element signature="e#4621#7049#0" expanded="true" />
-            <marker date="1486264332000" expanded="true" signature="7455:7476" placeholder="..." />
+            <element signature="e#2726#3291#0" expanded="false" />
+            <element signature="e#4760#4818#0" expanded="true" />
+            <element signature="e#4885#5295#0" expanded="true" />
+            <element signature="e#5361#7789#0" expanded="true" />
+            <element signature="e#7831#9290#0" expanded="true" />
+            <element signature="e#9819#9853#0" expanded="true" />
           </folding>
         </state>
       </provider>
