@@ -214,7 +214,8 @@ def browse():
     display_reviews = []
     requested_id = -1
     if requested_review_id != None:
-        requested_id = int(requested_review_id)
+        if len(requested_review_id) > 0:
+            requested_id = int(requested_review_id)
 
     for review in reviews:
         print(review)
@@ -223,22 +224,23 @@ def browse():
         #(name,title,author)=prefix.split('_',3)
         identifier = review.id
         book =   Book.query.filter_by(id = review.book_id).first()
-        title = book.title
+        book_title = book.title
         author = Person.query.filter_by(id = book.author_id).first()
         review_author = Person.query.filter_by(id = review.review_author_id).first()
+        author_name = "{} {}".format(author.first_name, author.last_name)
+        reviewer_name = "{} {}".format(review_author.first_name, review_author.last_name)
 
 
-        display_string="{} {} {} {} {}".format(
-        title,
-         author.first_name,
-         author.last_name,
-         review_author.first_name,
-         review_author.last_name,
-         )
         display_review_text = ""
         if requested_id == review.id:
              display_review_text = review.review_text
-        display_review = [identifier,display_string,display_review_text]
+
+        display_review = dict(
+            id=identifier,
+            author_name=author_name,
+            reviewer_name=reviewer_name,
+            book_title=book_title,
+            review_text=display_review_text)
         display_reviews.append(display_review)
 
     print (display_reviews)
