@@ -80,9 +80,9 @@ class Review(db.Model):
     #star_rating = db.Column(db.Integer, unique=False)
     review_author_id = db.Column(db.Integer, db.ForeignKey('people.id'),nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'),nullable=False)
-    def __repr__(self):
-        found_book = Book.query.filter_by(id = self.book_id).first()
-        return '<Book title: %r>' % found_book.title
+    #def __repr__(self):
+        #found_book = Book.query.filter_by(id = self.book_id).first()
+        #return '<Book title: %r>' % found_book.title
 
 
 class NameForm(Form):
@@ -91,7 +91,7 @@ class NameForm(Form):
     last_name = StringField('Surname?', validators=[Required(), NoneOf(nochar)])
     title = StringField('Title of book reviewed', validators=[Required(), NoneOf(nochar)])
     author_first_name = StringField('Author first name', validators=[Required(), NoneOf(nochar)])
-    author_surname = StringField('Author surnamer', validators=[Required(), NoneOf(nochar)])
+    author_surname = StringField('Author surname', validators=[Required(), NoneOf(nochar)])
 
     review = TextAreaField('Write a review', validators=[Required(),NoneOf(nochar)])
 
@@ -132,6 +132,8 @@ def write():
         if user is None:
            user = Person(first_name = form.first_name.data,last_name=form.last_name.data)
            db.session.add(user)
+           db.session.commit()
+
            session['known']=False
         else:
            session['known']=True
@@ -144,6 +146,8 @@ def write():
         if author is None:
            author = Person(first_name = form.author_first_name.data,last_name=form.author_surname.data)
            db.session.add(author)
+           db.session.commit()
+
            session['known_author']=False
         else:
            session['known_author']=True
@@ -157,17 +161,20 @@ def write():
            book = Book(title=form.title.data,author_id=author.id)
 
            db.session.add(book)
+           db.session.commit()
+
            session['known_book']=False
         else:
            session['known_book']=True
 
         session['book'] = form.title.data
 
-
+        db.session.commit()
 # create the Review
 
         review = Review(review_text=form.review.data,book_id=book.id,review_author_id=user.id)
         db.session.add(review)
+        db.session.commit()
 
 
 # clear the form
@@ -175,8 +182,8 @@ def write():
 
         form.first_name.data = ''
         form.last_name.data = ''
-        form.author_surname = ''
-        form.author_first_name = ''
+        form.author_surname.data = ''
+        form.author_first_name.data = ''
         form.title.data = ''
         form.review.data = ''
 
@@ -207,7 +214,8 @@ def browse():
     display_reviews = []
     requested_id = -1
     if requested_review_id != None:
-        requested_id = int(requested_review_id)
+        if len(requested_review_id) > 0:
+            requested_id = int(requested_review_id)
 
     for review in reviews:
         print(review)
@@ -216,28 +224,23 @@ def browse():
         #(name,title,author)=prefix.split('_',3)
         identifier = review.id
         book =   Book.query.filter_by(id = review.book_id).first()
-        title = book.title
+        book_title = book.title
         author = Person.query.filter_by(id = book.author_id).first()
         review_author = Person.query.filter_by(id = review.review_author_id).first()
+        author_name = "{} {}".format(author.first_name, author.last_name)
+        reviewer_name = "{} {}".format(review_author.first_name, review_author.last_name)
 
-
-        display_string="{} {} {} {} {}".format(
-        title,
-         author.first_name,
-         author.last_name,
-         review_author.first_name,
-         review_author.last_name,
-         )
-        #print ("review.id: {} requested_review_id: {} subtraction: {}".format(review.id,requested_review_id, review.id-int(requested_review_id)))
-        print("review.id: {} requested_id: {} subtraction: {}".format(review.id,requested_id,review.id-requested_id))
 
         display_review_text = ""
         if requested_id == review.id:
-             print ("requested_id == review.id")
              display_review_text = review.review_text
-             print ("display_review_text {}".format(display_review_text))
-        #print (displayname)
-        display_review = [identifier,display_string,display_review_text]
+
+        display_review = dict(
+            id=identifier,
+            author_name=author_name,
+            reviewer_name=reviewer_name,
+            book_title=book_title,
+            review_text=display_review_text)
         display_reviews.append(display_review)
 
     print (display_reviews)
@@ -269,5 +272,7 @@ def internal_server_error(e):
     return render_template('500.html')
 
 if __name__ == '__main__':
-    manager.run()
-    app.run(debug=True)
+    #manager.run()
+    app.run(host='0.0.0.0', port=5005, debug=True)
+
+

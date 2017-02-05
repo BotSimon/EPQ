@@ -9,8 +9,12 @@ Browse
 
 	<ul>
 	{% for display_review in reviews %}
-	<li><a href="./browse?review_id={{display_review[0]}}">{{display_review[1]}}</a>
-	<br />{{display_review[2]}}
+	<li><a href="./browse?review_id={{display_review['id']}}">
+	<span class=text-primary>{{display_review['book_title']}}</span>
+	<span class=text-danger>{{display_review['author_name']}}</span>
+	<span class=text-primary>{{display_review['reviewer_name']}}</span>
+	</a>
+	<br />{{display_review['review_text']}}
 	</li>
 	{% endfor %}
 	</ul>	
