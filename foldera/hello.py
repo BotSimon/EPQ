@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from flask_sqlalchemy import SQLAlchemy
 from wtforms import StringField, SubmitField, TextAreaField
-from wtforms.validators import Required, AnyOf, NoneOf
+from wtforms.validators import Required, AnyOf, NoneOf, Optional
 from flask import Flask, render_template, session, redirect, url_for, flash, request
 from flask_script import Manager
 from flask_bootstrap import Bootstrap
@@ -97,6 +97,14 @@ class NameForm(Form):
 
     submit = SubmitField('Submit')
 
+class SearchForm(Form):
+    nochar="_/\\:*?\"<>|"
+    search_author = StringField('Author name?', validators=[Optional(),NoneOf(nochar)])
+    search_reviewer = StringField('Reviewer name?', validators=[Optional(),NoneOf(nochar)])
+    search_title = StringField('Book title?', validators=[Optional(),NoneOf(nochar)])
+    submit = SubmitField('Search')
+
+
 def writetofile (name, review, author, title):
     text="name:  {}, \nreview: {}, \nauthor: {}, \ntitle: {}".format(name, review, author, title)
     save_path = fullpath('reviews')
@@ -119,9 +127,20 @@ def fullpath (path):
 def home():
     return render_template('index.html', home_active="active")
 
-@app.route('/search')
-def select():
-    return render_template('user.html', search_active="active")
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    form = SearchForm()
+    if form.validate_on_submit() == False:
+         return render_template('search.html',
+            form = form, search_active="active")
+    else:
+        search_author = form.search_author.data
+        search_reviewer = form.search_reviewer.data
+        search_title = form.search_title.data
+
+        return render_template('search.html',
+            form = form, search_active="active")
+
 
 @app.route('/write', methods=['GET', 'POST'])
 def write():
@@ -274,5 +293,3 @@ def internal_server_error(e):
 if __name__ == '__main__':
     #manager.run()
     app.run(host='0.0.0.0', port=5005, debug=True)
-
-
