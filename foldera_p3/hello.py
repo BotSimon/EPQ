@@ -1,5 +1,6 @@
 from flask_wtf import Form
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import Required, AnyOf, NoneOf, Optional
 from flask import Flask, render_template, session, redirect, url_for, flash, request
@@ -105,6 +106,34 @@ class SearchForm(Form):
     submit = SubmitField('Search')
 
 
+def displayReviewFromReview(review, requested_id=-1):
+    #prefix=filename.split('.',1)[0]
+    #print(prefix)
+    #(name,title,author)=prefix.split('_',3)
+    identifier = review.id
+    book =   Book.query.filter_by(id = review.book_id).first()
+    book_title = book.title
+    author = Person.query.filter_by(id = book.author_id).first()
+    review_author = Person.query.filter_by(id = review.review_author_id).first()
+    author_name = "{} {}".format(author.first_name, author.last_name)
+    reviewer_name = "{} {}".format(review_author.first_name, review_author.last_name)
+
+    display_review_text = ""
+    if requested_id and int(requested_id) == review.id:
+         display_review_text = review.review_text
+
+    display_review = dict(
+        id=identifier,
+        author_name=author_name,
+        reviewer_name=reviewer_name,
+        book_title=book_title,
+        review_text=display_review_text)
+
+    return display_review
+
+
+
+
 def writetofile (name, review, author, title):
     text="name:  {}, \nreview: {}, \nauthor: {}, \ntitle: {}".format(name, review, author, title)
     save_path = fullpath('reviews')
@@ -129,17 +158,79 @@ def home():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
+    requested_review_id = request.args.get('review_id')
+    search_author = request.args.get('author_search')
+    search_reviewer = request.args.get('reviewer_search')
+    search_title = request.args.get('title_search')
+
+
     form = SearchForm()
-    if form.validate_on_submit() == False:
+
+    if requested_review_id == None and form.validate_on_submit() == False:
          return render_template('search.html',
             form = form, search_active="active")
     else:
-        search_author = form.search_author.data
-        search_reviewer = form.search_reviewer.data
-        search_title = form.search_title.data
+        if (requested_review_id == None):
+            request.args=[]
+            search_author = form.search_author.data
+            search_reviewer = form.search_reviewer.data
+            search_title = form.search_title.data
+
+
+        author_list=search_author.split(' ')
+        reviewer_list=search_reviewer.split(' ')
+        authors= "'{}'".format("','".join(author_list))
+        reviewers= "'{}'".format("','".join(reviewer_list))
+
+
+        print(reviewers)
+        print(authors)
+        #make some SQL statement
+        SQL=(
+        "SELECT *"
+        " FROM reviews INNER JOIN books ON reviews.book_id = books.id"
+        " INNER JOIN people authors ON authors.id = books.author_id"
+        " INNER JOIN people reviewers ON reviews.review_author_id = reviewers.id"
+        " WHERE"
+        " (reviewers.first_name IN (:reviewers) OR reviewers.last_name IN (:reviewers))"
+        " OR"
+        " (authors.first_name IN (:authors) OR authors.last_name IN (:authors))"
+        " OR"
+        " (books.title IN (:title))"
+        )
+
+
+        SQL = ( "SELECT *"
+        " FROM reviews"
+        " INNER JOIN books ON reviews.book_id = books.id"
+        " INNER JOIN people authors ON authors.id = books.author_id"
+        " INNER JOIN people reviewers ON reviews.review_author_id = reviewers.id"
+        " WHERE (reviewers.first_name IN ({reviewer_names}) OR reviewers.last_name IN ({reviewer_names}))"
+        " OR (authors.first_name IN ({author_names}) OR authors.last_name IN ({author_names}))"
+        " OR (books.title IN ('{title_string}'))")
+
+        SQL = SQL.format(author_names=authors
+                   , reviewer_names=reviewers
+                   , title_string=search_title)
+
+
+        print(SQL)
+        SQL=text(SQL)
+        #result=db.engine.execute(SQL,authors=authors,reviewers=reviewers,title=search_title).fetchall()
+        result=db.engine.execute(SQL).fetchall()
+
+        display_reviews = []
+
+        for review in result:
+            display_review = displayReviewFromReview(review,requested_review_id)
+            display_reviews.append(display_review)
+
+
+
+        #run the SQL on the database
 
         return render_template('search.html',
-            form = form, search_active="active")
+            form = form, search_active="active", reviews=display_reviews,url='search',author_search=search_author,title_search=search_title,reviewer_search=search_reviewer )
 
 
 @app.route('/write', methods=['GET', 'POST'])
@@ -237,35 +328,14 @@ def browse():
             requested_id = int(requested_review_id)
 
     for review in reviews:
-        print(review)
-        #prefix=filename.split('.',1)[0]
-        #print(prefix)
-        #(name,title,author)=prefix.split('_',3)
-        identifier = review.id
-        book =   Book.query.filter_by(id = review.book_id).first()
-        book_title = book.title
-        author = Person.query.filter_by(id = book.author_id).first()
-        review_author = Person.query.filter_by(id = review.review_author_id).first()
-        author_name = "{} {}".format(author.first_name, author.last_name)
-        reviewer_name = "{} {}".format(review_author.first_name, review_author.last_name)
 
-
-        display_review_text = ""
-        if requested_id == review.id:
-             display_review_text = review.review_text
-
-        display_review = dict(
-            id=identifier,
-            author_name=author_name,
-            reviewer_name=reviewer_name,
-            book_title=book_title,
-            review_text=display_review_text)
+        display_review = displayReviewFromReview(review,requested_id)
         display_reviews.append(display_review)
 
     print (display_reviews)
 
 
-    return render_template('browse.html', browse_active="active", reviews=display_reviews)
+    return render_template('browse.html', browse_active="active", reviews=display_reviews,url='browse')
 
 @app.route('/read/<filename>')
 def read(filename):
