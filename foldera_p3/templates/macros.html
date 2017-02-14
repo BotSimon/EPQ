@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Browse
+{% endblock %} 
+
+{% block page_content %}
+
+	<ul>
+	{% for display_review in reviews %}
+	<li><a href="./browse?review_id={{display_review['id']}}">
+	<span class=text-primary>{{display_review['book_title']}}</span>
+	<span class=text-danger>{{display_review['author_name']}}</span>
+	<span class=text-primary>{{display_review['reviewer_name']}}</span>
+	</a>
+	<br />{{display_review['review_text']}}
+	</li>
+	{% endfor %}
+	</ul>	
+	
+{% endblock %}
+
